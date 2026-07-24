@@ -1,0 +1,184 @@
+/* ============================================================================
+   tokens.css — the single source of visual truth
+   ----------------------------------------------------------------------------
+   Everything downstream reads from here. Never hard-code a colour, a duration
+   or a radius in a component; add it here first.
+
+   The accent triad (--a-h/--a-s/--a-l and the two ambient tints) is written at
+   runtime by utils/theme.js, which interpolates it continuously through the
+   day. The values below are the pre-paint fallback (deep night) so the very
+   first frame is never wrong-coloured.
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* ---- Substrate ------------------------------------------------------- */
+  /* True black base: on OLED iPhones the panel simply switches off, which is
+     what makes the glass layers read as genuinely floating. */
+  --ink-void: #000000;
+  --ink-0: #05070a;
+  --ink-1: #090b10;
+  --ink-2: #0e1116;
+
+  /* ---- Elevation, expressed as light rather than shadow ---------------- */
+  --sf-1: rgba(255, 255, 255, 0.035);
+  --sf-2: rgba(255, 255, 255, 0.055);
+  --sf-3: rgba(255, 255, 255, 0.08);
+  --sf-4: rgba(255, 255, 255, 0.12);
+  --sf-press: rgba(255, 255, 255, 0.16);
+
+  /* ---- Hairlines ------------------------------------------------------- */
+  --line-1: rgba(255, 255, 255, 0.06);
+  --line-2: rgba(255, 255, 255, 0.1);
+  --line-3: rgba(255, 255, 255, 0.16);
+  --line-glow: rgba(255, 255, 255, 0.28);
+
+  /* ---- Type colour ramp ------------------------------------------------ */
+  --t-1: rgba(255, 255, 255, 0.96);
+  --t-2: rgba(255, 255, 255, 0.64);
+  --t-3: rgba(255, 255, 255, 0.4);
+  --t-4: rgba(255, 255, 255, 0.24);
+
+  /* ---- Accent (runtime-driven) ---------------------------------------- */
+  --a-h: 248;
+  --a-s: 72%;
+  --a-l: 66%;
+  --accent: hsl(var(--a-h) var(--a-s) var(--a-l));
+  --accent-soft: hsl(var(--a-h) var(--a-s) var(--a-l) / 0.16);
+  --accent-line: hsl(var(--a-h) var(--a-s) var(--a-l) / 0.36);
+  --accent-glow: hsl(var(--a-h) calc(var(--a-s) + 10%) var(--a-l) / 0.5);
+  --accent-ink: hsl(var(--a-h) 40% 8%);
+
+  /* Two ambient tints painted into the background field. */
+  --amb-1: #2a2f6b;
+  --amb-2: #10131f;
+
+  /* ---- Semantic -------------------------------------------------------- */
+  --danger: #ff5a52;
+  --danger-soft: rgba(255, 90, 82, 0.14);
+  --ok: #4fd6a0;
+
+  /* ---- Glass ----------------------------------------------------------- */
+  --glass-tint: rgba(14, 16, 22, 0.62);
+  --glass-tint-heavy: rgba(9, 11, 16, 0.82);
+  --glass-blur: saturate(190%) blur(28px);
+  --glass-blur-sm: saturate(170%) blur(16px);
+  --glass-inner: inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.05);
+
+  /* ---- Shadow: wide, soft, low-contrast. Never a hard drop. ------------ */
+  --sh-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --sh-2: 0 4px 16px -4px rgba(0, 0, 0, 0.5);
+  --sh-3: 0 12px 40px -12px rgba(0, 0, 0, 0.7);
+  --sh-4: 0 28px 80px -20px rgba(0, 0, 0, 0.85);
+
+  /* ---- Space scale ----------------------------------------------------- */
+  --s-1: 2px;
+  --s-2: 4px;
+  --s-3: 6px;
+  --s-4: 8px;
+  --s-5: 12px;
+  --s-6: 16px;
+  --s-7: 20px;
+  --s-8: 24px;
+  --s-9: 32px;
+  --s-10: 40px;
+  --s-11: 56px;
+  --s-12: 72px;
+
+  /* Horizontal page gutter. Generous — breathing room is the whole point. */
+  --gutter: 20px;
+
+  /* ---- Radius ---------------------------------------------------------- */
+  --r-1: 8px;
+  --r-2: 12px;
+  --r-3: 16px;
+  --r-4: 20px;
+  --r-5: 26px;
+  --r-6: 34px;
+  --r-full: 999px;
+
+  /* ---- Type ------------------------------------------------------------ */
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+    "Inter", system-ui, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-num: ui-rounded, -apple-system, "SF Pro Rounded", var(--font);
+
+  --fs-display: 34px;
+  --lh-display: 39px;
+  --fs-t1: 27px;
+  --lh-t1: 32px;
+  --fs-t2: 21px;
+  --lh-t2: 26px;
+  --fs-t3: 17px;
+  --lh-t3: 22px;
+  --fs-body: 16px;
+  --lh-body: 22px;
+  --fs-callout: 15px;
+  --lh-callout: 20px;
+  --fs-sub: 14px;
+  --lh-sub: 19px;
+  --fs-foot: 13px;
+  --lh-foot: 17px;
+  --fs-cap: 11px;
+  --lh-cap: 13px;
+
+  /* ---- Motion ---------------------------------------------------------- */
+  /* The iOS sheet curve. Fast out of the gate, long gentle settle. This one
+     curve carries ~80% of the app's motion and is why it feels physical. */
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  /* Slight overshoot, for things that "arrive". */
+  --ease-pop: cubic-bezier(0.34, 1.42, 0.5, 1);
+  /* Symmetric, for opacity-only work. */
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Leaving the screen — accelerate away, no settle. */
+  --ease-exit: cubic-bezier(0.5, 0, 0.9, 0.4);
+
+  --d-micro: 130ms;
+  --d-sm: 220ms;
+  --d-md: 320ms;
+  --d-lg: 440ms;
+  --d-xl: 620ms;
+
+  /* ---- Layers ---------------------------------------------------------- */
+  --z-ambient: 0;
+  --z-page: 10;
+  --z-mapchrome: 20;
+  --z-tabbar: 40;
+  --z-scrim: 50;
+  --z-sheet: 60;
+  --z-lightbox: 80;
+  --z-toast: 90;
+
+  /* ---- Safe area ------------------------------------------------------- */
+  --sa-t: env(safe-area-inset-top, 0px);
+  --sa-r: env(safe-area-inset-right, 0px);
+  --sa-b: env(safe-area-inset-bottom, 0px);
+  --sa-l: env(safe-area-inset-left, 0px);
+
+  --tabbar-h: 56px;
+  /* Total height the tab bar occupies, for content padding. */
+  --tabbar-total: calc(var(--tabbar-h) + var(--sa-b) + 10px);
+}
+
+/* Accessibility: honour the system switch, and honour it completely. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --d-micro: 1ms;
+    --d-sm: 1ms;
+    --d-md: 1ms;
+    --d-lg: 1ms;
+    --d-xl: 1ms;
+  }
+}
+
+/* Higher-contrast substitutions for users who ask for them. */
+@media (prefers-contrast: more) {
+  :root {
+    --t-2: rgba(255, 255, 255, 0.8);
+    --t-3: rgba(255, 255, 255, 0.6);
+    --t-4: rgba(255, 255, 255, 0.42);
+    --line-1: rgba(255, 255, 255, 0.14);
+    --line-2: rgba(255, 255, 255, 0.22);
+  }
+}

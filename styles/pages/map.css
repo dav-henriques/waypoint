@@ -1,0 +1,246 @@
+/* ============================================================================
+   map.css — the map screen and its chrome
+   ========================================================================== */
+
+.mappage {
+  background: var(--ink-0);
+}
+
+.map__canvas {
+  position: absolute;
+  inset: 0;
+}
+.map__canvas canvas {
+  outline: none;
+}
+
+.mapchrome {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-mapchrome);
+  pointer-events: none;
+  padding: calc(var(--sa-t) + var(--s-4)) var(--s-5) 0;
+}
+
+.mapchrome__top {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-5);
+  transition: opacity var(--d-md) var(--ease-soft),
+    transform var(--d-md) var(--ease);
+}
+
+/* Chrome recedes while the map is in motion. The map is the content; the
+   buttons are not, and they should get out of the way when you're looking. */
+.map__canvas[data-moving] ~ .mapchrome .mapchrome__top {
+  opacity: 0.35;
+}
+
+.mapcount {
+  pointer-events: auto;
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+  height: 34px;
+  padding: 0 var(--s-5);
+  border-radius: var(--r-full);
+  transition: opacity var(--d-md) var(--ease-soft);
+}
+.mapcount.is-empty {
+  opacity: 0;
+}
+
+.mapcount__n {
+  font-size: 15px;
+  font-weight: 640;
+  letter-spacing: -0.02em;
+}
+.mapcount__l {
+  color: var(--t-3);
+  font-size: 10px;
+}
+
+.mapchrome__orbs {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  pointer-events: auto;
+}
+
+.orb[data-busy] svg {
+  animation: spin 900ms linear infinite;
+  opacity: 0.6;
+}
+
+/* ---- Empty hint --------------------------------------------------------- */
+
+.maphint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--tabbar-total) + var(--s-6));
+  display: flex;
+  justify-content: center;
+  padding-inline: var(--s-7);
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
+  transition: opacity var(--d-xl) var(--ease), transform var(--d-xl) var(--ease);
+  pointer-events: none;
+}
+.maphint.is-on {
+  opacity: 1;
+  transform: none;
+  transition-delay: 700ms;
+}
+
+.maphint__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  padding: var(--s-4) var(--s-6);
+  border-radius: var(--r-full);
+  color: var(--t-2);
+}
+.maphint__inner svg {
+  color: var(--accent);
+}
+
+/* ---- Placement mode ----------------------------------------------------- */
+
+.reticle,
+.placebar {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--d-md) var(--ease), transform var(--d-lg) var(--ease);
+}
+
+.reticle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  z-index: var(--z-mapchrome);
+  transform: translate(0, 0) scale(0.7);
+}
+
+.reticle__ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 60px;
+  height: 60px;
+  margin: -30px 0 0 -30px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--accent-line);
+}
+.reticle__ring::before,
+.reticle__ring::after {
+  content: "";
+  position: absolute;
+  background: var(--accent-line);
+}
+.reticle__ring::before {
+  left: 50%;
+  top: -10px;
+  bottom: -10px;
+  width: 1px;
+  margin-left: -0.5px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--accent-line) 18%,
+    var(--accent-line) 82%,
+    transparent
+  );
+}
+.reticle__ring::after {
+  top: 50%;
+  left: -10px;
+  right: -10px;
+  height: 1px;
+  margin-top: -0.5px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--accent-line) 18%,
+    var(--accent-line) 82%,
+    transparent
+  );
+}
+
+.reticle__dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 13px;
+  height: 13px;
+  margin: -6.5px 0 0 -6.5px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.4), 0 0 22px var(--accent-glow);
+}
+
+.reticle__pulse {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 60px;
+  height: 60px;
+  margin: -30px 0 0 -30px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-soft), transparent 65%);
+  animation: user-pulse 3s var(--ease-soft) infinite;
+}
+
+.placebar {
+  position: absolute;
+  left: var(--s-5);
+  right: var(--s-5);
+  bottom: calc(var(--sa-b) + var(--s-5));
+  /* Above the tab bar as well as replacing it — belt and braces, because a
+     Cancel that cannot be tapped is a trap. */
+  z-index: calc(var(--z-tabbar) + 1);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--s-4);
+  height: 58px;
+  padding: 0 var(--s-6);
+  border-radius: var(--r-5);
+  transform: translate3d(0, 20px, 0);
+}
+.placebar > *:last-child {
+  justify-self: end;
+}
+.placebar__hint {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.mappage[data-placing] .reticle {
+  opacity: 1;
+  transform: scale(1);
+}
+.mappage[data-placing] .placebar {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.mappage[data-placing] .mapchrome__top,
+.mappage[data-placing] .maphint {
+  opacity: 0;
+}
+
+/* ---- Filters sheet ------------------------------------------------------ */
+
+.filters {
+  padding: 0 var(--gutter) calc(var(--sa-b) + var(--s-7));
+}
+
+.filters__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+}

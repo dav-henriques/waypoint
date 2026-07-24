@@ -1,0 +1,123 @@
+/* ============================================================================
+   tabbar.css — floating, not welded to the bottom edge
+   ========================================================================== */
+
+.tabbar-host {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-tabbar);
+  padding: 0 var(--s-5) calc(var(--sa-b) + var(--s-4));
+  pointer-events: none;
+  transition: transform var(--d-lg) var(--ease), opacity var(--d-md) var(--ease);
+}
+
+.tabbar-host.is-hidden {
+  transform: translate3d(0, calc(100% + 20px), 0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tabbar {
+  pointer-events: auto;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: stretch;
+  height: var(--tabbar-h);
+  border-radius: var(--r-5);
+  padding: 0 var(--s-2);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Same top highlight as the sheet — the two read as the same material. */
+.tabbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid var(--line-1);
+  pointer-events: none;
+}
+
+.tab {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--t-3);
+  transition: color var(--d-md) var(--ease-soft);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tab__glyph {
+  display: grid;
+  place-items: center;
+  transform-origin: 50% 60%;
+  transition: transform var(--d-md) var(--ease-pop);
+}
+
+.tab__label {
+  font-size: 9.5px;
+  letter-spacing: 0.055em;
+  color: currentColor;
+  opacity: 0.85;
+  transition: opacity var(--d-md) var(--ease-soft);
+}
+
+/* The glow behind an active tab: no pill, no underline, just light. */
+.tab__glow {
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  width: 46px;
+  height: 34px;
+  transform: translateX(-50%) scale(0.6);
+  border-radius: var(--r-full);
+  background: radial-gradient(
+    ellipse at center,
+    var(--accent-soft) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--d-lg) var(--ease), transform var(--d-lg) var(--ease);
+  pointer-events: none;
+}
+
+.tab.is-active {
+  color: var(--accent);
+}
+.tab.is-active .tab__glow {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+.tab.is-active .tab__glyph {
+  transform: translateY(-1px);
+}
+.tab.is-active .tab__label {
+  opacity: 1;
+}
+
+/* Add. Deliberately a different object. */
+.tab--action {
+  color: var(--accent);
+}
+.tab--action .tab__glyph {
+  width: 38px;
+  height: 30px;
+  border-radius: var(--r-2);
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent-line),
+    0 6px 20px -8px var(--accent-glow);
+  transition: transform var(--d-md) var(--ease-pop),
+    background-color var(--d-sm) var(--ease-soft);
+}
+.tab--action:active .tab__glyph {
+  background: hsl(var(--a-h) var(--a-s) var(--a-l) / 0.3);
+}
+.tab--action .tab__label {
+  opacity: 0.55;
+}

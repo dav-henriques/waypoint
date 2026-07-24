@@ -1,0 +1,252 @@
+/* ============================================================================
+   pin.css — map markers, clusters, the location dot, and the drop ghost
+   ========================================================================== */
+
+.pin {
+  --pc: #98a2ae;
+  width: 30px;
+  height: 30px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity var(--d-md) var(--ease), transform var(--d-lg) var(--ease-pop);
+  will-change: transform;
+}
+.pin[data-in] {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.pin__body {
+  position: relative;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--pc);
+  background: rgba(8, 10, 14, 0.72);
+  backdrop-filter: blur(10px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  box-shadow: inset 0 0 0 1.25px color-mix(in srgb, var(--pc) 62%, transparent),
+    0 3px 10px -2px rgba(0, 0, 0, 0.7);
+  transition: transform var(--d-md) var(--ease-pop),
+    box-shadow var(--d-md) var(--ease);
+}
+
+/* The halo only exists for the selected pin — a glow on every marker would be
+   a light show, and there would be no way to say "this one". */
+.pin__halo {
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--pc) 42%, transparent) 0%,
+    transparent 68%
+  );
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity var(--d-lg) var(--ease), transform var(--d-lg) var(--ease-pop);
+  pointer-events: none;
+}
+
+.pin__fav {
+  position: absolute;
+  top: -2px;
+  right: -3px;
+  z-index: 3;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: var(--danger);
+  box-shadow: 0 0 0 1.5px rgba(6, 8, 12, 0.9);
+}
+
+.pin.is-selected {
+  z-index: 5;
+}
+.pin.is-selected .pin__body {
+  transform: scale(1.28);
+  box-shadow: inset 0 0 0 1.5px var(--pc),
+    0 6px 20px -4px color-mix(in srgb, var(--pc) 70%, transparent);
+}
+.pin.is-selected .pin__halo {
+  opacity: 1;
+  transform: scale(1);
+  animation: pin-breathe 2.8s var(--ease-soft) infinite;
+}
+
+@keyframes pin-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.14); opacity: 0.55; }
+}
+
+.pin.is-dimmed {
+  opacity: 0.24;
+  filter: grayscale(0.6);
+}
+
+/* ---- Cluster ------------------------------------------------------------ */
+
+.cluster {
+  --pc: #98a2ae;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  border-radius: var(--r-full);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: #fff;
+  background: rgba(10, 12, 17, 0.74);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  box-shadow: inset 0 0 0 1.25px color-mix(in srgb, var(--pc) 48%, transparent),
+    0 4px 14px -3px rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity var(--d-md) var(--ease), transform var(--d-lg) var(--ease-pop);
+}
+.cluster[data-in] {
+  opacity: 1;
+  transform: scale(1);
+}
+.cluster[data-size="lg"] {
+  min-width: 40px;
+  height: 40px;
+}
+.cluster__n {
+  font-size: 13px;
+  font-weight: 640;
+  letter-spacing: -0.01em;
+}
+.cluster:active {
+  transform: scale(0.92);
+}
+
+/* ---- User location ------------------------------------------------------ */
+
+.userdot {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+.userdot__core {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.92), 0 2px 10px rgba(0, 0, 0, 0.6);
+  z-index: 2;
+}
+.userdot__pulse {
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.22;
+  animation: user-pulse 2.6s var(--ease-soft) infinite;
+}
+@keyframes user-pulse {
+  0% { transform: scale(0.5); opacity: 0.3; }
+  70% { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* ---- Long-press ghost --------------------------------------------------- */
+/* Shows the gesture is being recognised before it fires. Without it, a
+   long-press feels like nothing happened until suddenly everything did.      */
+
+.map-ghost {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.map-ghost__ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 54px;
+  height: 54px;
+  margin: -27px 0 0 -27px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--accent-line);
+  opacity: 0;
+  transform: scale(0.3);
+}
+.map-ghost__dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0;
+  transform: scale(0.2);
+}
+
+.map-ghost[data-arm] .map-ghost__ring {
+  animation: ghost-arm 460ms var(--ease) forwards;
+}
+.map-ghost[data-arm] .map-ghost__dot {
+  animation: ghost-arm-dot 460ms var(--ease) forwards;
+}
+@keyframes ghost-arm {
+  from { opacity: 0; transform: scale(0.3); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes ghost-arm-dot {
+  from { opacity: 0; transform: scale(0.2); }
+  to { opacity: 0.85; transform: scale(1); }
+}
+
+.map-ghost[data-drop] .map-ghost__ring {
+  animation: ghost-drop 520ms var(--ease) forwards;
+}
+.map-ghost[data-drop] .map-ghost__dot {
+  animation: ghost-drop-dot 520ms var(--ease) forwards;
+}
+@keyframes ghost-drop {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(2.1); }
+}
+@keyframes ghost-drop-dot {
+  0% { opacity: 1; transform: scale(1.3); }
+  100% { opacity: 0; transform: scale(0.4); }
+}
+
+/* ---- MapLibre overrides -------------------------------------------------- */
+
+.maplibregl-ctrl-attrib {
+  background: rgba(0, 0, 0, 0.35) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--r-full) !important;
+  font-size: 10px !important;
+  margin: 0 0 6px 8px !important;
+  opacity: 0.5;
+}
+.maplibregl-ctrl-attrib a {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.maplibregl-ctrl-attrib-button {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+}
+.maplibregl-canvas:focus {
+  outline: none;
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Memory Map</title>
+
+    <!-- viewport-fit=cover is what lets the app draw under the notch and the
+         home indicator; without it a PWA has black bars and looks like a
+         website in a frame. interactive-widget stops the keyboard resizing
+         the layout out from under a sheet. -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no, interactive-widget=resizes-content"
+    />
+    <meta name="description" content="A personal map of the places worth remembering." />
+    <meta name="theme-color" content="#05070a" />
+    <meta name="color-scheme" content="dark" />
+
+    <!-- iOS standalone -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Memory Map" />
+    <link rel="apple-touch-icon" href="./assets/icons/icon-180.png" />
+    <link rel="icon" href="./assets/icons/icon-192.png" type="image/png" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+
+    <link rel="stylesheet" href="./assets/vendor/maplibre-gl.css" />
+    <link rel="stylesheet" href="./styles/tokens.css" />
+    <link rel="stylesheet" href="./styles/reset.css" />
+    <link rel="stylesheet" href="./styles/base.css" />
+    <link rel="stylesheet" href="./styles/components/sheet.css" />
+    <link rel="stylesheet" href="./styles/components/tabbar.css" />
+    <link rel="stylesheet" href="./styles/components/controls.css" />
+    <link rel="stylesheet" href="./styles/components/card.css" />
+    <link rel="stylesheet" href="./styles/components/media.css" />
+    <link rel="stylesheet" href="./styles/components/toast.css" />
+    <link rel="stylesheet" href="./styles/components/pin.css" />
+    <link rel="stylesheet" href="./styles/pages/map.css" />
+    <link rel="stylesheet" href="./styles/pages/detail.css" />
+    <link rel="stylesheet" href="./styles/pages/editor.css" />
+    <link rel="stylesheet" href="./styles/pages/library.css" />
+    <link rel="stylesheet" href="./styles/pages/search.css" />
+    <link rel="stylesheet" href="./styles/pages/stats.css" />
+    <link rel="stylesheet" href="./styles/pages/settings.css" />
+  </head>
+
+  <body>
+    <div id="app"></div>
+
+    <!-- MapLibre ships as a UMD bundle and is vendored rather than pulled from
+         a CDN: the app then works on a plane, on a subway, and in five years
+         when that CDN has moved. -->
+    <script src="./assets/vendor/maplibre-gl.js"></script>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,179 @@
+/* ============================================================================
+   sheet.css
+   ========================================================================== */
+
+.sheet-host {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-sheet);
+  pointer-events: none;
+}
+
+.sheet-scrim {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: auto;
+}
+
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  will-change: transform;
+
+  border-radius: var(--r-6) var(--r-6) 0 0;
+  background: rgba(16, 18, 24, 0.72);
+  backdrop-filter: saturate(200%) blur(40px);
+  -webkit-backdrop-filter: saturate(200%) blur(40px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 -24px 70px -20px rgba(0, 0, 0, 0.9);
+  overflow: hidden;
+
+  /* Transform is driven frame-by-frame by the spring, never by a transition —
+     the two would fight and the result would be mush. */
+  touch-action: none;
+}
+
+/* A hairline of light along the top edge, brightest in the middle. Costs one
+   pseudo-element and does most of the work of making the sheet feel like a
+   physical panel catching a light source. */
+.sheet::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.24),
+    transparent
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.sheet__grabber {
+  flex: none;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  cursor: grab;
+}
+.sheet__grabber span {
+  width: 38px;
+  height: 5px;
+  border-radius: var(--r-full);
+  background: var(--line-3);
+  transition: background-color var(--d-sm) var(--ease-soft),
+    width var(--d-md) var(--ease), transform var(--d-md) var(--ease);
+}
+.sheet[data-dragging] .sheet__grabber span {
+  background: var(--line-glow);
+  width: 46px;
+}
+
+.sheet__content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Any scroll region inside a sheet must be tagged so the sheet knows to hand
+   the gesture over. */
+[data-scroll] {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  flex: 1;
+  min-height: 0;
+}
+
+.sheet__bar {
+  flex: none;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--s-4);
+  padding: var(--s-2) var(--gutter) var(--s-5);
+  position: relative;
+}
+.sheet__bar > *:last-child {
+  justify-self: end;
+}
+.sheet__title {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.sheet__body {
+  padding: 0 var(--gutter) calc(var(--sa-b) + var(--s-8));
+}
+
+/* Compact peek variant used for the tapped-pin card. */
+.sheet--peek {
+  background: rgba(14, 16, 22, 0.66);
+}
+
+/* Action sheet ------------------------------------------------------------ */
+
+.actions {
+  padding: var(--s-2) var(--s-5) calc(var(--sa-b) + var(--s-5));
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.actions__group {
+  border-radius: var(--r-4);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: var(--glass-inner);
+}
+
+.actions__title {
+  padding: var(--s-4) var(--s-6) var(--s-5);
+  text-align: center;
+  color: var(--t-3);
+}
+
+.actions__btn {
+  width: 100%;
+  min-height: 54px;
+  padding: var(--s-4) var(--s-6);
+  display: flex;
+  align-items: center;
+  gap: var(--s-5);
+  font-size: var(--fs-body);
+  font-weight: 500;
+  position: relative;
+  transition: background-color var(--d-micro) var(--ease-soft);
+}
+.actions__btn + .actions__btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--line-1);
+}
+.actions__btn:active {
+  background: var(--sf-3);
+}
+.actions__btn[data-danger] {
+  color: var(--danger);
+}
+.actions__btn[data-cancel] {
+  justify-content: center;
+  font-weight: 620;
+}

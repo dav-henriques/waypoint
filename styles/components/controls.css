@@ -1,0 +1,379 @@
+/* ============================================================================
+   controls.css — fields, switches, segments, chips, swatches, tags
+   ========================================================================== */
+
+/* ---- Field ------------------------------------------------------------- */
+
+.field {
+  display: block;
+  padding: var(--s-5) var(--s-6);
+  position: relative;
+}
+
+.field__label {
+  display: block;
+  margin-bottom: var(--s-3);
+  color: var(--t-4);
+}
+
+.field__input {
+  display: block;
+  width: 100%;
+  resize: none;
+  color: var(--t-1);
+  line-height: 1.35;
+  background: transparent;
+  transition: color var(--d-sm) var(--ease-soft);
+}
+
+.field__input--body {
+  font-size: 16px;
+  letter-spacing: -0.011em;
+}
+.field__input--title {
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 620;
+  letter-spacing: -0.022em;
+}
+.field__input--sub {
+  font-size: 15px;
+  color: var(--t-2);
+}
+
+.field__input::placeholder {
+  color: var(--t-4);
+}
+
+/* With the ring gone, focus is shown by the field itself warming very
+   slightly and its label taking the accent. Quieter than a border, and it
+   points at the label rather than drawing a box around the content. */
+.field {
+  transition: background-color var(--d-md) var(--ease-soft);
+}
+.field:focus-within {
+  background: rgba(255, 255, 255, 0.028);
+}
+.field:focus-within .field__label {
+  color: var(--accent);
+}
+
+/* ---- Switch ------------------------------------------------------------ */
+
+.switch {
+  flex: none;
+  width: 50px;
+  height: 30px;
+  border-radius: var(--r-full);
+  background: rgba(255, 255, 255, 0.12);
+  position: relative;
+  transition: background-color var(--d-md) var(--ease);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.switch__knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #f2f3f5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+  /* Ease-pop gives the knob a hint of overshoot at the end of its travel —
+     the same thing the physical switch metaphor implies. */
+  transition: transform var(--d-md) var(--ease-pop);
+}
+
+.switch[data-on] {
+  background: var(--accent);
+  box-shadow: inset 0 0 0 1px hsl(var(--a-h) var(--a-s) var(--a-l) / 0.5),
+    0 0 18px -6px var(--accent-glow);
+}
+.switch[data-on] .switch__knob {
+  transform: translateX(20px);
+}
+
+/* ---- Segmented --------------------------------------------------------- */
+
+.segmented {
+  position: relative;
+  display: flex;
+  padding: 3px;
+  border-radius: var(--r-3);
+  background: rgba(255, 255, 255, 0.055);
+  box-shadow: var(--glass-inner);
+  isolation: isolate;
+}
+
+.segmented__indicator {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 0;
+  border-radius: calc(var(--r-3) - 3px);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  z-index: -1;
+}
+
+.segmented__item {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-3);
+  font-size: var(--fs-sub);
+  font-weight: 560;
+  letter-spacing: -0.008em;
+  color: var(--t-3);
+  white-space: nowrap;
+  transition: color var(--d-md) var(--ease-soft);
+}
+.segmented__item.is-active {
+  color: var(--t-1);
+}
+.segmented__item:active {
+  opacity: 0.6;
+}
+
+/* ---- Chips ------------------------------------------------------------- */
+
+.chiprow {
+  position: relative;
+  margin-inline: calc(var(--gutter) * -1);
+}
+
+.chiprow__scroll {
+  display: flex;
+  gap: var(--s-4);
+  overflow-x: auto;
+  padding: var(--s-2) var(--gutter);
+  scroll-padding-inline: var(--gutter);
+
+  /* Chips fade out at the edges rather than being clipped, which tells the eye
+     there is more without an arrow. A mask is used instead of a gradient
+     overlay so the fade works over the ambient background and over glass
+     alike — an overlay would have to guess the colour underneath, and would be
+     wrong on one of them. */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 18px,
+    #000 calc(100% - 18px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 18px,
+    #000 calc(100% - 18px),
+    transparent 100%
+  );
+}
+
+.chip {
+  --chip-c: var(--t-2);
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  height: 36px;
+  padding: 0 var(--s-5);
+  border-radius: var(--r-full);
+  font-size: var(--fs-sub);
+  font-weight: 540;
+  letter-spacing: -0.006em;
+  color: var(--t-2);
+  background: rgba(255, 255, 255, 0.055);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  transition: transform var(--d-micro) var(--ease-soft),
+    background-color var(--d-sm) var(--ease-soft),
+    color var(--d-sm) var(--ease-soft),
+    box-shadow var(--d-sm) var(--ease-soft);
+}
+.chip:active {
+  transform: scale(0.95);
+}
+.chip svg {
+  color: var(--chip-c);
+  transition: color var(--d-sm) var(--ease-soft);
+}
+
+.chip[data-on] {
+  color: #fff;
+  background: color-mix(in srgb, var(--chip-c) 22%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--chip-c) 45%, transparent),
+    0 4px 16px -8px var(--chip-c);
+}
+.chip[data-on] svg {
+  color: var(--chip-c);
+}
+
+.chip--ghost {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line-2);
+}
+
+.chip__count {
+  font-size: 11px;
+  color: var(--t-4);
+  margin-left: 1px;
+}
+.chip[data-on] .chip__count {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ---- Swatches ---------------------------------------------------------- */
+
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+  padding: var(--s-5) var(--s-6);
+}
+
+.swatch {
+  --sc: #888;
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  transition: transform var(--d-sm) var(--ease-pop);
+}
+.swatch:active {
+  transform: scale(0.88);
+}
+
+.swatch__fill {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--sc);
+  box-shadow: 0 2px 8px -3px var(--sc), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform var(--d-md) var(--ease-pop);
+}
+.swatch[style*="transparent"] .swatch__fill {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.14) 0 4px,
+    transparent 4px 8px
+  );
+  box-shadow: inset 0 0 0 1px var(--line-2);
+}
+
+.swatch__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--sc);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity var(--d-md) var(--ease), transform var(--d-md) var(--ease-pop);
+}
+.swatch[data-on] .swatch__ring {
+  opacity: 1;
+  transform: scale(1);
+}
+.swatch[data-on] .swatch__fill {
+  transform: scale(0.72);
+}
+
+/* ---- Glyph grid -------------------------------------------------------- */
+
+.glyphgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  gap: var(--s-3);
+  padding: var(--s-5) var(--s-6);
+}
+
+.glyphpick {
+  --gc: var(--t-2);
+  aspect-ratio: 1;
+  border-radius: var(--r-2);
+  display: grid;
+  place-items: center;
+  color: var(--t-3);
+  background: rgba(255, 255, 255, 0.04);
+  transition: transform var(--d-micro) var(--ease-soft),
+    background-color var(--d-sm) var(--ease-soft),
+    color var(--d-sm) var(--ease-soft),
+    box-shadow var(--d-sm) var(--ease-soft);
+}
+.glyphpick:active {
+  transform: scale(0.9);
+}
+.glyphpick[data-on] {
+  color: var(--gc);
+  background: color-mix(in srgb, var(--gc) 18%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gc) 42%, transparent);
+}
+
+/* ---- Tags -------------------------------------------------------------- */
+
+.taginput {
+  padding: var(--s-4) var(--s-5) var(--s-5);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  align-items: center;
+}
+
+.tagpill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-3);
+  height: 30px;
+  padding: 0 var(--s-4);
+  border-radius: var(--r-full);
+  font-size: var(--fs-foot);
+  font-weight: 540;
+  color: var(--t-1);
+  background: rgba(255, 255, 255, 0.09);
+  animation: fade-rise var(--d-md) var(--ease) both;
+  transition: transform var(--d-micro) var(--ease-soft);
+}
+.tagpill:active {
+  transform: scale(0.92);
+}
+.tagpill svg {
+  color: var(--t-3);
+}
+
+.tags__input {
+  flex: 1;
+  min-width: 110px;
+  height: 30px;
+  font-size: 16px;
+  color: var(--t-1);
+  background: transparent;
+}
+
+.tags__hints {
+  padding: var(--s-4) 0 0;
+  margin-inline: calc(var(--s-5) * -1);
+  padding-inline: var(--s-5);
+}
+
+/* ---- Date -------------------------------------------------------------- */
+
+.datefield {
+  position: relative;
+}
+.datefield__input {
+  margin-left: auto;
+  color: var(--t-2);
+  font-size: var(--fs-callout);
+  text-align: right;
+  background: transparent;
+  min-width: 120px;
+}

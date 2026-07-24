@@ -1,0 +1,200 @@
+/* ============================================================================
+   library.css — the two-axis browser
+   ========================================================================== */
+
+.ribbon {
+  flex: none;
+  position: relative;
+  z-index: 2;
+}
+
+.ribbon__rail {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s-7);
+  overflow-x: auto;
+  padding: var(--s-2) var(--gutter) var(--s-6);
+  /* The focal point is the left edge of the content box, so an item can always
+     be scrolled all the way into it — including the last one. */
+  scroll-snap-type: x proximity;
+  scroll-padding-left: var(--gutter);
+  /* Trailing space is set precisely in Ribbon.js once widths are known; this
+     is only the pre-layout placeholder. */
+  padding-right: 60vw;
+}
+
+.ribbon__item {
+  --t: 1;
+  flex: none;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-3);
+  color: var(--t-3);
+  transform-origin: 0 100%;
+
+  /* Everything below is driven by --t: 0 at the focal point, 1 far away.
+     One custom property, three properties animated, no JS per frame beyond
+     writing the number. */
+  opacity: calc(1 - var(--t) * 0.62);
+  transform: scale(calc(1 - var(--t) * 0.14));
+  transition: color var(--d-md) var(--ease-soft);
+}
+
+.ribbon__glyph {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  position: relative;
+}
+
+/* The glow marks the focal point, and only the focal point. */
+.ribbon__glyph::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-soft), transparent 68%);
+  opacity: calc(1 - var(--t));
+  transition: opacity var(--d-md) var(--ease-soft);
+}
+
+.ribbon__label {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+
+.ribbon__count {
+  position: absolute;
+  top: -2px;
+  right: -4px;
+  font-size: 10px;
+  font-weight: 640;
+  color: var(--t-4);
+  opacity: calc(1 - var(--t));
+}
+
+.ribbon__item.is-active {
+  color: var(--t-1);
+}
+.ribbon__item.is-active .ribbon__label {
+  color: var(--accent);
+}
+
+/* A hairline under the rail, fading out at both ends. */
+.ribbon::after {
+  content: "";
+  position: absolute;
+  left: var(--gutter);
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(to right, var(--line-2), transparent 65%);
+}
+
+/* ---- Column ------------------------------------------------------------- */
+
+.column {
+  padding-top: var(--s-6);
+}
+
+.column--enter > * {
+  animation: fade-rise var(--d-lg) var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 32ms);
+}
+
+/* ---- Collections grid --------------------------------------------------- */
+
+.colgrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  padding: 0 var(--gutter);
+}
+
+.ccard--new {
+  --pc: var(--t-3);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--line-2);
+  color: var(--t-2);
+}
+.ccard--new::after {
+  display: none;
+}
+.ccard--new .ccard__glyph {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: none;
+  color: var(--t-2);
+}
+
+/* ---- Editor preview ----------------------------------------------------- */
+
+.cpreview {
+  --pc: var(--t-3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-5);
+  padding: var(--s-8) var(--s-6) var(--s-9);
+  margin-bottom: var(--s-6);
+  border-radius: var(--r-5);
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--pc) 22%, transparent),
+    transparent 70%
+  );
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pc) 18%, transparent);
+}
+
+.cpreview__glyph {
+  width: 66px;
+  height: 66px;
+  border-radius: var(--r-4);
+  display: grid;
+  place-items: center;
+  color: var(--pc);
+  background: color-mix(in srgb, var(--pc) 18%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pc) 34%, transparent),
+    0 10px 30px -12px var(--pc);
+  transition: color var(--d-md) var(--ease-soft),
+    background-color var(--d-md) var(--ease-soft);
+}
+
+.cpreview__name {
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- Collection detail --------------------------------------------------- */
+
+.coldetail__head {
+  --pc: var(--t-3);
+  padding: var(--s-6) var(--gutter) var(--s-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  align-items: flex-start;
+}
+
+.coldetail__glyph {
+  width: 58px;
+  height: 58px;
+  border-radius: var(--r-4);
+  display: grid;
+  place-items: center;
+  color: var(--pc);
+  background: color-mix(in srgb, var(--pc) 16%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pc) 30%, transparent);
+  margin-bottom: var(--s-3);
+}
+
+.coldetail__desc {
+  max-width: 34ch;
+}

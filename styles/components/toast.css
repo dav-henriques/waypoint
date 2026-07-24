@@ -1,0 +1,82 @@
+/* ============================================================================
+   toast.css — top of screen, because the bottom belongs to the thumb
+   ========================================================================== */
+
+.toast-host {
+  position: fixed;
+  top: calc(var(--sa-t) + var(--s-4));
+  left: 0;
+  right: 0;
+  z-index: var(--z-toast);
+  display: flex;
+  justify-content: center;
+  padding-inline: var(--s-5);
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  max-width: 460px;
+  width: max-content;
+  min-height: 46px;
+  padding: var(--s-4) var(--s-5);
+  border-radius: var(--r-4);
+  color: var(--t-1);
+  animation: toast-in var(--d-lg) var(--ease) both;
+}
+
+.toast svg {
+  color: var(--t-2);
+  flex: none;
+}
+
+.toast[data-tone="success"] svg {
+  color: var(--ok);
+}
+.toast[data-tone="error"] svg {
+  color: var(--danger);
+}
+
+.toast__text {
+  min-width: 0;
+}
+
+.toast__action {
+  flex: none;
+  margin-left: var(--s-3);
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--r-2);
+  font-size: var(--fs-sub);
+  font-weight: 620;
+  color: var(--accent);
+  background: var(--accent-soft);
+  transition: transform var(--d-micro) var(--ease-soft);
+}
+.toast__action:active {
+  transform: scale(0.94);
+}
+
+.toast[data-out] {
+  animation: toast-out var(--d-md) var(--ease-exit) both;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -18px, 0) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes toast-out {
+  to {
+    opacity: 0;
+    transform: translate3d(0, -12px, 0) scale(0.97);
+  }
+}

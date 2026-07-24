@@ -1,0 +1,221 @@
+/* ============================================================================
+   stats.css — two charts, both as quiet as they can be while still being read
+   ========================================================================== */
+
+.stats {
+  padding: 0 0 var(--s-8);
+}
+
+.stats__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-4);
+  padding: 0 var(--gutter);
+  margin-bottom: var(--s-9);
+}
+
+.stat__glyph {
+  color: var(--t-4);
+  margin-bottom: var(--s-2);
+}
+
+.stats__section {
+  margin-bottom: var(--s-9);
+}
+
+.stats__label {
+  padding: 0 var(--gutter) var(--s-6);
+}
+
+/* ---- Months ------------------------------------------------------------- */
+
+.chart {
+  padding: 0 var(--gutter);
+  position: relative;
+}
+
+.chart__plot {
+  display: flex;
+  align-items: flex-end;
+  /* 2px of surface between adjacent fills, per the mark spec. */
+  gap: 4px;
+  height: 132px;
+}
+
+.chart__slot {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-3);
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.chart__bar {
+  position: relative;
+  width: 100%;
+  /* The button is full height so the hit target is generous even when the bar
+     is one pixel tall; only the fill inside is scaled. */
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: stretch;
+  padding: 0;
+}
+
+.chart__fill {
+  display: block;
+  width: 100%;
+  height: calc(var(--r) * 100%);
+  min-height: 3px;
+  /* Rounded data-end anchored to the baseline: square where it meets the axis,
+     4px radius where the value ends. */
+  border-radius: 4px 4px 1px 1px;
+  background: linear-gradient(
+    to top,
+    hsl(var(--a-h) var(--a-s) var(--a-l) / 0.42),
+    hsl(var(--a-h) var(--a-s) var(--a-l) / 0.85)
+  );
+  transform-origin: 50% 100%;
+  animation: bar-rise var(--d-xl) var(--ease) both;
+  animation-delay: calc(var(--i) * 26ms);
+}
+
+@keyframes bar-rise {
+  from {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.chart__bar[data-zero] .chart__fill {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.chart__bar[data-now] .chart__fill {
+  background: linear-gradient(
+    to top,
+    hsl(var(--a-h) var(--a-s) var(--a-l) / 0.6),
+    var(--accent)
+  );
+  box-shadow: 0 0 18px -6px var(--accent-glow);
+}
+
+.chart__val {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--r) * 100%);
+  margin-bottom: 5px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 620;
+  color: var(--t-2);
+  pointer-events: none;
+}
+
+.chart__tick {
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: var(--t-4);
+}
+
+.chart__base {
+  height: 1px;
+  margin: var(--s-2) var(--gutter) 0;
+  background: var(--line-1);
+}
+
+.chart__readout {
+  min-height: 18px;
+  padding-top: var(--s-4);
+  text-align: center;
+}
+
+/* ---- Category bars ------------------------------------------------------- */
+
+.bars {
+  padding: 0 var(--gutter);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.bars__row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  animation: fade-rise var(--d-lg) var(--ease) both;
+  animation-delay: calc(var(--i) * 40ms);
+}
+
+.bars__glyph {
+  --pc: var(--t-3);
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--r-1);
+  display: grid;
+  place-items: center;
+  color: var(--pc);
+  background: color-mix(in srgb, var(--pc) 15%, transparent);
+}
+
+.bars__name {
+  flex: none;
+  width: 84px;
+  color: var(--t-2);
+}
+
+.bars__track {
+  flex: 1;
+  min-width: 0;
+  height: 8px;
+  border-radius: var(--r-full);
+  background: rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+.bars__fill {
+  --pc: var(--t-3);
+  display: block;
+  height: 100%;
+  width: var(--w);
+  border-radius: var(--r-full);
+  background: var(--pc);
+  box-shadow: 0 0 12px -4px var(--pc);
+  transform-origin: 0 50%;
+  animation: bar-grow var(--d-xl) var(--ease) both;
+  animation-delay: 120ms;
+}
+
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.bars__count {
+  flex: none;
+  width: 26px;
+  text-align: right;
+  color: var(--t-3);
+}
+
+.stats__cities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  padding: 0 var(--gutter);
+}

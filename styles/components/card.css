@@ -1,0 +1,213 @@
+/* ============================================================================
+   card.css — a place, in a list
+   ========================================================================== */
+
+.pcard {
+  display: flex;
+  align-items: center;
+  gap: var(--s-5);
+  padding: var(--s-4) var(--s-4) var(--s-4) var(--s-4);
+  border-radius: var(--r-4);
+  position: relative;
+  background: transparent;
+  transition: background-color var(--d-sm) var(--ease-soft),
+    transform var(--d-micro) var(--ease-soft);
+}
+.pcard:active {
+  background: var(--sf-2);
+}
+
+.pcard__thumb {
+  --pc: var(--t-3);
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--r-3);
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--pc) 14%, rgba(255, 255, 255, 0.03));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pc) 24%, transparent);
+  color: var(--pc);
+}
+
+.pcard--wide .pcard__thumb {
+  width: 74px;
+  height: 74px;
+  border-radius: var(--r-4);
+}
+
+.pcard__img,
+.ptile__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.06);
+  transition: opacity var(--d-lg) var(--ease-soft), transform var(--d-xl) var(--ease);
+}
+.pcard__img[data-in],
+.ptile__img[data-in] {
+  opacity: 1;
+  transform: none;
+}
+
+.pcard__text {
+  flex: 1;
+  min-width: 0;
+}
+.pcard__meta {
+  margin-top: 2px;
+}
+.pcard__desc {
+  margin-top: var(--s-3);
+}
+
+.pcard__side {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--s-3);
+  padding-right: var(--s-2);
+}
+.pcard__fav {
+  color: var(--danger);
+  display: grid;
+  place-items: center;
+}
+
+/* Hairline between rows, inset past the thumbnail — iOS list geometry. */
+.plist .pcard + .pcard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 72px;
+  right: var(--s-4);
+  height: 1px;
+  background: var(--line-1);
+}
+.plist {
+  padding-inline: var(--s-4);
+}
+
+/* ---- Tile (horizontal rail) -------------------------------------------- */
+
+.ptile {
+  --pc: var(--t-3);
+  flex: none;
+  width: 132px;
+  text-align: left;
+}
+
+.ptile__media {
+  position: relative;
+  width: 132px;
+  height: 96px;
+  border-radius: var(--r-3);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  color: var(--pc);
+  background: color-mix(in srgb, var(--pc) 16%, rgba(255, 255, 255, 0.03));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pc) 22%, transparent);
+  margin-bottom: var(--s-4);
+}
+
+.ptile__title {
+  font-weight: 560;
+}
+.ptile__meta {
+  margin-top: 1px;
+}
+
+/* ---- Collection card ---------------------------------------------------- */
+
+.ccard {
+  --pc: var(--t-3);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--s-5);
+  padding: var(--s-5);
+  border-radius: var(--r-4);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--pc) 13%, transparent),
+    rgba(255, 255, 255, 0.03)
+  );
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pc) 16%, transparent),
+    var(--glass-inner);
+  overflow: hidden;
+  transition: transform var(--d-micro) var(--ease-soft);
+}
+.ccard:active {
+  transform: scale(0.975);
+}
+
+.ccard__glyph {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-3);
+  display: grid;
+  place-items: center;
+  color: var(--pc);
+  background: color-mix(in srgb, var(--pc) 18%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pc) 30%, transparent);
+}
+
+.ccard__text {
+  flex: 1;
+  min-width: 0;
+}
+.ccard__count {
+  margin-top: 2px;
+}
+
+/* A soft bloom in the corner keeps the card from reading as a flat rectangle. */
+.ccard::after {
+  content: "";
+  position: absolute;
+  right: -30px;
+  top: -40px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--pc) 26%, transparent), transparent 70%);
+  pointer-events: none;
+}
+
+/* ---- Stat card ---------------------------------------------------------- */
+
+.stat {
+  padding: var(--s-6);
+  border-radius: var(--r-4);
+  background: var(--sf-1);
+  box-shadow: var(--glass-inner);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  min-height: 96px;
+  justify-content: center;
+}
+
+.stat__value {
+  font-family: var(--font-num);
+  font-size: 30px;
+  line-height: 34px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat__label {
+  color: var(--t-3);
+}
+
+.stat--accent .stat__value {
+  color: var(--accent);
+}
